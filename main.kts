@@ -6,7 +6,8 @@ fun main(args: Array<String>) {
 
     for (arg in args) {
         for (charr in arg) {
-            println(charr)
+            val ternaryCheck = if (charr === "a") charr else charr.repeat(2)
+            println("values: ${ternaryCheck}")
         }
     }
 
