@@ -1,7 +1,7 @@
 class Solution {
-    fun isPerfectSquare(num: Int): Boolean {
-
-    }
+  fun isPerfectSquare(num: Int): Boolean {
+    return true
+  }
 }
 
-val sol = Solution
+val sol = new Solution{}
