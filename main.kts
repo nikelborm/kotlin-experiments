@@ -1,5 +1,9 @@
-fun main(args: Array<String>) {
-    if (args.size !== 2) {
+fun main(args: Iterable<String>) {
+    var size = 0;
+    for (i in args) {
+        size += 1;
+    }
+    if (size !== 2) {
         println("go fuck yourself");
         return;
     }
@@ -17,4 +21,4 @@ fun main(args: Array<String>) {
 val test = arrayOf("asd", "asdd2")
 val test2 = arrayOf<String>()
 
-main(test)
+main(test.asIterable())
