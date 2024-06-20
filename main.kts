@@ -17,8 +17,8 @@ fun node(left: TreeNode?, value: Int, right: TreeNode?): TreeNode {
 
 enum class NodeState {
   JustArrived,
-  LeftBrachClear,
-  RightBranchClear
+  LeftBranchCompleted,
+  RightBranchCompleted
 }
 
 data class StackEntry(val node: TreeNode, var status: NodeState) {}
@@ -37,23 +37,23 @@ class Solution {
       val cur = stack.last()
       if(cur.status === NodeState.JustArrived) {
         val left = cur.node.left
-        cur.status = NodeState.LeftBrachClear
+        cur.status = NodeState.LeftBranchCompleted
         if(left !== null) {
           stack.add(StackEntry(left, NodeState.JustArrived))
           continue
         }
       }
 
-      if(cur.status === NodeState.LeftBrachClear) {
+      if(cur.status === NodeState.LeftBranchCompleted) {
         val right = cur.node.right;
-        cur.status = NodeState.RightBranchClear
+        cur.status = NodeState.RightBranchCompleted
         if(right !== null) {
           stack.add(StackEntry(right, NodeState.JustArrived))
           continue
         }
       }
 
-      if(cur.status === NodeState.RightBranchClear) {
+      if(cur.status === NodeState.RightBranchCompleted) {
         result.add(cur.node.`val`)
         stack.removeLast()
       }
