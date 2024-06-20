@@ -1,4 +1,8 @@
-class TreeNode(var `val`: Int) {
+data class TreeNode(
+  val `val`: Int
+  // , val left: TreeNode? = null
+  // , val right: TreeNode? = null
+) {
   var left: TreeNode? = null
   var right: TreeNode? = null
 }
@@ -7,54 +11,55 @@ fun node(left: TreeNode?, value: Int, right: TreeNode?): TreeNode {
   val newNode = TreeNode(value)
   newNode.left = left
   newNode.right = right
+  // val newNode = TreeNode(value, left, right)
   return newNode
 }
 
+enum class NodeState {
+  JustArrived,
+  LeftBrachClear,
+  RightBranchClear
+}
+
+data class StackEntry(val node: TreeNode, var status: NodeState) {}
 
 
 class Solution {
-  fun step(node: TreeNode, traceToParentStack: MutableList<TreeNode>, ret: MutableList<Int>): TreeNode {
-    if(node.left !== null) {
-      traceToParentStack.add(node)
-      return node.left
-    }
-    if(node.right !== null) {
-      traceToParentStack.add(node)
-      return node.right
-    }
-    ret.add(node.`val`)
-
-
-    var leftLeaf = root
-    while(leftLeaf?.left !== null) {
-      stack.add(leftLeaf)
-      leftLeaf = leftLeaf!!.left
-    }
-    return leftLeaf
-  }
-
   fun postorderTraversal(root: TreeNode?): List<Int> {
     if (root === null) return listOf<Int>();
 
-    val mutableList = mutableListOf<Int>();
+    val stack = mutableListOf(
+      StackEntry(root, NodeState.JustArrived)
+    )
+    val result = mutableListOf<Int>();
 
-    val stack = mutableListOf<TreeNode>();
-    var currentNode = root;
+    while(!stack.isEmpty()) {
+      val cur = stack.last()
+      if(cur.status === NodeState.JustArrived) {
+        val left = cur.node.left
+        cur.status = NodeState.LeftBrachClear
+        if(left !== null) {
+          stack.add(StackEntry(left, NodeState.JustArrived))
+          continue
+        }
+      }
 
-    // going down
-    while(currentNode?.left !== null) {
-      stack.add(currentNode)
-      currentNode = currentNode!!.left
+      if(cur.status === NodeState.LeftBrachClear) {
+        val right = cur.node.right;
+        cur.status = NodeState.RightBranchClear
+        if(right !== null) {
+          stack.add(StackEntry(right, NodeState.JustArrived))
+          continue
+        }
+      }
+
+      if(cur.status === NodeState.RightBranchClear) {
+        result.add(cur.node.`val`)
+        stack.removeLast()
+      }
     }
-    println(stack)
 
-    // while(currentNode !== root) {
-
-    // }
-
-
-    return mutableList.toList()
-
+    return result.toList()
   }
 }
 
@@ -73,7 +78,7 @@ val test = mapOf(
 for (i in test) {
   val result = sol.postorderTraversal(i.key);
 
-  // if (result !== i.value)
-  //   throw Exception("postorderTraversal(${i.key})=${result}. Expected ${i.value}")
-  // println("postorderTraversal(${i.key}) is fine ❤️ ")
+  if (result != i.value)
+    throw Exception("postorderTraversal(${i.key})=${result}. Expected ${i.value}")
+  println("postorderTraversal(${i.key}) is fine ❤️ ")
 }
