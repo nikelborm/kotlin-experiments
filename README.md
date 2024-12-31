@@ -1,4 +1,4 @@
-# Kotlin expriments
+# Kotlin experiments
 
 ## Install deps
 
